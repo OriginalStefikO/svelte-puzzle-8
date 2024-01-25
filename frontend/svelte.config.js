@@ -14,7 +14,7 @@ const config = {
 				// Look to "src/routes/+layout.ts" to see how it's done 
 			pages: '../public/', // Build output directory
 			assets: '../public',
-			fallback: undefined,
+			fallback: "200.html",
 			precompress: false,
 			strict: true,
 		}),

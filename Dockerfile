@@ -17,8 +17,8 @@ WORKDIR /app/backend
 COPY requirements.txt ./
 RUN pip install -r requirements.txt
 
-COPY --from=frontendBuilder /app/public ./public
 COPY . .
+COPY --from=frontendBuilder /app/public ./public
 
 EXPOSE 8080
 

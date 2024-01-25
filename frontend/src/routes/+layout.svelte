@@ -12,12 +12,19 @@
 		<Navbar />
 		
 		<main class="max-w-screen-lg p-3 py-2">
-			<slot />
+			<div class="py-6 flex flex-col items-center gap-4">
+				<div class="mx-auto w-fit flex flex-col items-center">
+					<h1 class="text-3xl">Puzzle 8 solver</h1>
+					<p>By Ondřej Šteffan, 2024</p>
+				</div>
+				
+				<slot />
+			</div>
 		</main>
 	</div>
 
 	<footer class="p-3 flex gap-2 items-center">
-		<p>Example by <a href="https://www.linkedin.com/in/steffan-ondrej/">Ondřej Šteffan</a></p>
+		<p>Created by <a href="https://www.linkedin.com/in/steffan-ondrej/">Ondřej Šteffan</a></p>
 		<a href="https://github.com/OriginalStefikO" target="_blank" class="flex items-center justify-center">
 			<img class="size-7 mb-0.5 object-contain " src={github_logo} alt="Github logo" />
 		</a>
