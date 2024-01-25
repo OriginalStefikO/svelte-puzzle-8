@@ -1,0 +1,14 @@
+{
+  "name": "sveltepuzzle8",
+  "version": "0.5.0",
+  "description": "Runner for Svelte puzzle 8",  
+  "scripts": {
+    "start-backend": "python main.py",
+    "start-backend-dev": "npm run build-frontend && python main.py --dev",
+    "build-frontend": "cd ./frontend && npm run build",
+    "start-frontend-dev": "cd ./frontend && npm run dev",
+    "build-and-run": "npm run build-frontend && npm run start-backend"
+  },
+  "author": "Stefik_O",
+  "license": "MIT"
+}

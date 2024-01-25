@@ -54,6 +54,8 @@ npm run dev
 
 ### <ins> Setting up Fastapi </ins>
 
+<!-- [FastAPI + Svelte starter ](https://github.com/OriginalStefikO/fastapi-svelte-starter)by [Ondřej Šteffan ](https://github.com/OriginalStefikO)is marked with [CC0 1.0 Universal ![](https://chooser-beta.creativecommons.org/img/cc-logo.f0ab4ebe.svg)![](https://chooser-beta.creativecommons.org/img/cc-zero.f5450231.svg)](http://creativecommons.org/publicdomain/zero/1.0?ref=chooser-v1) -->
+
 1. Create Python Virtual Enviroment (further just venv)
     - this will make our life easier
     - when you restart your workspace you will need to activate it again, just run the second line
@@ -179,3 +181,6 @@ uvicorn main:app --reload
 ```
 
 ### That's it! You should now have a fully functional application with a FastAPI backend and Svelte frontend. Of course, this is just a starting point and you can customize and add to it as needed for your own projects.
+
+
+<p xmlns:cc="http://creativecommons.org/ns#" xmlns:dct="http://purl.org/dc/terms/"><a property="dct:title" rel="cc:attributionURL" href="https://github.com/OriginalStefikO/fastapi-svelte-starter">FastAPI + Svelte starter</a> by <a rel="cc:attributionURL dct:creator" property="cc:attributionName" href="https://github.com/OriginalStefikO">Ondřej Šteffan</a> is marked with <a href="http://creativecommons.org/publicdomain/zero/1.0?ref=chooser-v1" target="_blank" rel="license noopener noreferrer" style="display:inline-block;">CC0 1.0 Universal<img style="height:22px!important;margin-left:3px;vertical-align:text-bottom;" src="https://mirrors.creativecommons.org/presskit/icons/cc.svg?ref=chooser-v1"><img style="height:22px!important;margin-left:3px;vertical-align:text-bottom;" src="https://mirrors.creativecommons.org/presskit/icons/zero.svg?ref=chooser-v1"></a></p>
