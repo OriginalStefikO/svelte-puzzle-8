@@ -1,7 +1,7 @@
 import uvicorn
 import sys
 
-from fastapi import FastAPI
+from fastapi import FastAPI, HTTPException, Request
 from fastapi.responses import FileResponse
 from fastapi.staticfiles import StaticFiles
 
@@ -20,6 +20,10 @@ async def favicon_ico():
 
 
 app.mount('/', StaticFiles(directory='public', html=True))
+
+@app.exception_handler(404)
+async def not_found_exception_handler(request: Request, exc: HTTPException):
+    return FileResponse("public/200.html")
 
 if __name__ == "__main__":
     if len(sys.argv) > 1:
