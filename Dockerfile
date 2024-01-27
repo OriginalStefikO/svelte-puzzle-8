@@ -13,13 +13,9 @@ RUN npm run build
 FROM python:3.11.7-slim AS backendBuilder
 
 WORKDIR /app/backend
-
 COPY requirements.txt ./
 RUN pip install -r requirements.txt
+COPY backend .
+COPY --from=frontendBuilder /app/public ../public
 
-COPY . .
-COPY --from=frontendBuilder /app/public ./public
-
-# EXPOSE 8080
-
-# CMD [ "python", "main.py" ]
+WORKDIR /app

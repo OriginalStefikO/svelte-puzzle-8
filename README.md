@@ -6,6 +6,13 @@ Last year school project
     - [Python 3.10+](https://www.python.org/downloads/)
     - [NodeJS 16.0+](https://nodejs.org/en)
 
+## Docker
+
+```bash
+docker build -t base:latest .
+docker-compose up -d 
+```
+
 ## How to run
 
 1. Clone this repository
