@@ -47,7 +47,6 @@
         class="h-8 rounded-lg border border-gray-400 p-2"
         placeholder="123456780"
         bind:value={outputString}
-        on:input={(e) => inputFieldChange(e)}
       />
     </div>
 	</section>

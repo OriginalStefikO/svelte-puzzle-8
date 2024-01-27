@@ -1,6 +1,6 @@
 <script lang="ts">
-	// import { goto } from "$app/navigation";
-	import { redirect } from "@sveltejs/kit";
+	import { goto } from "$app/navigation";
+	// import { redirect } from "@sveltejs/kit";
 	import { onMount } from "svelte";
 
   const puzzles = [
@@ -15,6 +15,6 @@
   const randomPuzzle = puzzles[Math.floor(Math.random() * puzzles.length)];
 
   onMount(() => {
-    redirect(300, `/solve/${randomPuzzle}`);
+    goto(`/solve/${randomPuzzle}`);
   })
 </script>

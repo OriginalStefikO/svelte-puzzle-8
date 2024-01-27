@@ -1,0 +1,23 @@
+version: '3.4'
+
+x-env:
+    service: &service
+        networks:
+            - shared
+        restart: unless-stopped
+
+networks:
+    shared:
+
+services:
+    recommender:
+        <<: *service
+        image: base
+        build:
+            context: .
+            dockerfile: Dockerfile
+        extra_hosts:
+            - "host.docker.internal:host-gateway"
+        ports:
+            - "${PORT:-8080}:8080"
+        command: "python main.py"

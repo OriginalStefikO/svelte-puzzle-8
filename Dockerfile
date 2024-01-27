@@ -20,6 +20,6 @@ RUN pip install -r requirements.txt
 COPY . .
 COPY --from=frontendBuilder /app/public ./public
 
-EXPOSE 8080
+# EXPOSE 8080
 
-CMD [ "python", "main.py" ]
+# CMD [ "python", "main.py" ]
