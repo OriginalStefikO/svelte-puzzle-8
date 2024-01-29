@@ -9,8 +9,8 @@ class Puzzle8Solver:
     self.closed_states:list[PuzzleNode] = [self.initial_state]
     self.open_states:list[PuzzleNode] = []
     
-  def heuristic(self, state: PuzzleNode, goal: PuzzleNode) -> PuzzleNode:
-    """Count of misplaced tiles or Manhatton distance
+  def heuristic_misplacedTiles(self, state: PuzzleNode, goal: PuzzleNode) -> PuzzleNode:
+    """Count of misplaced tiles
 
     Returns:
       Number: Heuristic value
@@ -23,9 +23,29 @@ class Puzzle8Solver:
           state.h += 1
     state.update_f()
     return state
+    
+  def heuristic_manhattanDistance(self, state: PuzzleNode, goal: PuzzleNode) -> PuzzleNode:
+    """ Manhattan distance
+
+    Returns:
+      Number: Heuristic value
+    """
+    
+    for y in range(len(state.data)):
+      for x in range(len(state.data[y])):
+        if (state.data[y][x] == goal.data[y][x]): continue # Tile is in the right place
+        if (state.data[y][x] == 0): continue # Empty tile does not count
+          
+        goal_tile_position = goal.get_tile(state.data[y][x])
+        
+        distance = abs(goal_tile_position[1] - x) + abs(goal_tile_position[0] - y)
+        state.h += distance
+          
+    state.update_f()
+    return state    
       
   def get_open_states(self, state: PuzzleNode) -> list[PuzzleNode]:
-    empty_tile_position = state.get_empty_tile()
+    empty_tile_position = state.get_tile(0)
     
     possible_transformations = [
       (empty_tile_position[0] + 1, empty_tile_position[1]), # Right
@@ -38,27 +58,39 @@ class Puzzle8Solver:
       new_state = state.swap(empty_tile_position, transformation)
       
       if (new_state is not None):
-        self.open_states.append(self.heuristic(new_state, self.goal_state))
+        self.open_states.append(self.heuristic_misplacedTiles(new_state, self.goal_state))
+        # self.open_states.append(self.heuristic_manhattanDistance(new_state, self.goal_state))
     
     return self.open_states
   
-  def get_best_state(self):
-    best_state = self.open_states[0]
-    for state in self.open_states:
-      if state < best_state:
-        best_state = state
-    return best_state
-      
+  def sort_open_states(self):
+    self.open_states = sorted(self.open_states, key=lambda state: (state.f, state.h))
   
   def solve(self) -> list[PuzzleNode]:
     current_state = self.initial_state
     
     while current_state != self.goal_state:
       self.get_open_states(current_state)
-      current_state = self.get_best_state()
+
+      self.sort_open_states()
+      
+      current_state = self.open_states[0]
+      while current_state in self.closed_states:
+        self.open_states.pop(0)
+        current_state = self.open_states[0]
+        if (len(self.open_states) == 1):
+          break
+      
       self.closed_states.append(current_state)
       self.open_states = []
+      
+      if (len(self.closed_states) > 69):
+        # raise Exception("Too many iterations")
+        break
     
+    if (current_state != self.goal_state):
+      print("Failed!")
+      return []
     print("Success!")
     print(current_state)
     return self.closed_states  
@@ -66,8 +98,8 @@ class Puzzle8Solver:
       
 if __name__ == "__main__":
   initial_state = PuzzleNode([
-    [1, 2, 3],
-    [4, 5, 6],
+    [2, 3, 6],
+    [1, 5, 4],
     [0, 7, 8]
   ])
 

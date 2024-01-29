@@ -1,4 +1,5 @@
-from copy import deepcopy
+from copy import copy
+import numpy as np
 
 
 class PuzzleNode:
@@ -23,7 +24,11 @@ class PuzzleNode:
       raise Exception("Data is not valid.")
     
   def __eq__(self, other) -> bool:
-    return self.data == other.data
+    # return self.data == other.data
+    base = np.array(self.data)
+    target = np.array(other.data)
+    
+    return np.array_equal(base, target)
   
   def __lt__(self, other) -> bool:
     return self.f < other.f
@@ -52,7 +57,7 @@ class PuzzleNode:
     
     return True
   
-  def get_empty_tile(self) -> tuple[int, int]:
+  def get_tile(self, tile:int) -> tuple[int, int]:
     """Get coordinates of empty tile
 
     Returns:
@@ -60,7 +65,7 @@ class PuzzleNode:
     """
     for y, row in enumerate(self.data):
       for x, item in enumerate(row):
-        if item == 0: return (x, y)
+        if item == tile: return (x, y)
     
     return (-1, -1)
   
@@ -87,7 +92,7 @@ class PuzzleNode:
       # raise Exception("Positions must be adjacent.")
       return None
     
-    new_data = [deepcopy(row) for row in self.data]
+    new_data = [copy(row) for row in self.data]
     
     new_data[base_position[1]][base_position[0]] = self.data[target_position[1]][target_position[0]]
     new_data[target_position[1]][target_position[0]] = self.data[base_position[1]][base_position[0]]
@@ -107,4 +112,4 @@ class PuzzleNode:
     name = f"Node: {self.name}\nDepth: {self.g}"
     
     # return f"{data_string_result} --> f: {self.f} g: {self.g} h: {self.h}\n{name}"
-    return f"{str(self.data)}\n{name}"
+    return f"{str(self.data)} -> g: {self.g}; h: {self.h}; f: {self.f}"
