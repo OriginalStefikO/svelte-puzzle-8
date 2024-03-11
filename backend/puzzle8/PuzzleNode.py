@@ -23,12 +23,14 @@ class PuzzleNode:
     if (not self.validate_data()):
       raise Exception("Data is not valid.")
     
+    self.update_f()
+    
   def __eq__(self, other) -> bool:
     # return self.data == other.data
     base = np.array(self.data)
     target = np.array(other.data)
     
-    return np.array_equal(base, target)
+    return np.array_equal(base, target) and self.f == other.f
   
   def __lt__(self, other) -> bool:
     return self.f < other.f

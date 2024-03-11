@@ -1,3 +1,5 @@
+import random
+
 from backend.puzzle8.PuzzleNode import PuzzleNode
 
 
@@ -16,10 +18,10 @@ class Puzzle8Solver:
       Number: Heuristic value
     """
     
-    for i in range(len(state.data)):
-      for j in range(len(state.data[i])):
-        if (state.data[i][j] != goal.data[i][j]):
-          if (state.data[i][j] == 0): continue # Empty tile does not count
+    for y in range(len(state.data)):
+      for x in range(len(state.data[y])):
+        if (state.data[y][x] != goal.data[y][x]):
+          if (state.data[y][x] == 0): continue # Empty tile does not count
           state.h += 1
     state.update_f()
     return state
@@ -54,13 +56,14 @@ class Puzzle8Solver:
       (empty_tile_position[0], empty_tile_position[1] - 1), # Up
     ]
     
+    # random.shuffle(possible_transformations)
+    
     for transformation in possible_transformations:
       new_state = state.swap(empty_tile_position, transformation)
       
       if (new_state is not None):
         self.open_states.append(self.heuristic_misplacedTiles(new_state, self.goal_state))
         # self.open_states.append(self.heuristic_manhattanDistance(new_state, self.goal_state))
-    
     return self.open_states
   
   def sort_open_states(self):
@@ -98,9 +101,9 @@ class Puzzle8Solver:
       
 if __name__ == "__main__":
   initial_state = PuzzleNode([
-    [2, 3, 6],
-    [1, 5, 4],
-    [0, 7, 8]
+    [6, 3, 4],
+    [2, 0, 1],
+    [7, 8, 5]
   ])
 
   goal_state = PuzzleNode([
