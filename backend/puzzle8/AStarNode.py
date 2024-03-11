@@ -5,7 +5,7 @@ class AStarNode:
     def __init__(self, state: list[list[int]] | np.ndarray, h, g, parent=None) -> None:
         self.state = np.array(state)
         self.parent = parent
-        self.h = 0
+        self.h: int | float = 0
         self.g = g
         self.f = h + g
         
@@ -16,10 +16,6 @@ class AStarNode:
 
     def __lt__(self, other):
         return self.f < other.f
-    
-    def __hash__(self):
-        state_tuple = tuple(map(tuple, self.state))
-        return hash((state_tuple, self.g, self.h, self.parent))
 
     def __eq__(self, other: np.ndarray):
         return np.array_equal(self.state, other)
@@ -34,8 +30,8 @@ class AStarNode:
         Returns:
             tuple[int, int]: (x, y)
         """
-        coordinates = np.where(self.state == tile)
-        return coordinates[1][0], coordinates[0][0]
+        y, x = np.where(self.state == tile)
+        return x[0], y[0]
 
     def get_children_nodes(self, goal_state) -> list["AStarNode"]:
         x, y = self.get_tile(0)
@@ -100,22 +96,18 @@ class AStarNode:
         """Manhattan distance
 
         Returns:
-          Number: Heuristic value
+            Number: Heuristic value
         """
         distance = 0
         for y in range(len(self.state)):
             for x in range(len(self.state[y])):
                 if self.state[y][x] == goal[y][x]:
-                    continue  
+                    continue
 
-                coordinates = np.where(self.state == goal[y][x])
-                goal_coordinates = coordinates[1][0], coordinates[0][0]
+                goal_tile_position = np.argwhere(self.state == goal[y][x])[0]
 
-                goal_tile_position = goal_coordinates
+                distance += np.abs(goal_tile_position[1] - x) + np.abs(goal_tile_position[0] - y)
 
-                distance += abs(goal_tile_position[1] - x) + abs(
-                    goal_tile_position[0] - y
-                )
         return distance
 
     def get_all_parents(self, start_node: "AStarNode") -> list["AStarNode"]:
