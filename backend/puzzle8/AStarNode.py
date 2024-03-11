@@ -16,6 +16,10 @@ class AStarNode:
 
     def __lt__(self, other):
         return self.f < other.f
+    
+    def __hash__(self):
+        state_tuple = tuple(map(tuple, self.state))
+        return hash((state_tuple, self.g, self.h, self.parent))
 
     def __eq__(self, other: np.ndarray):
         return np.array_equal(self.state, other)
@@ -48,9 +52,6 @@ class AStarNode:
             new_state = self.swap((x, y), transformation)
 
             if new_state is not None:
-                new_state.h = new_state.heuristic(goal_state)
-                new_state.update_f()
-
                 new_state.parent = self
                 children_nodes.append(new_state)
 
@@ -87,11 +88,11 @@ class AStarNode:
         new_state = np.copy(self.state)
 
         # Set tile in base position as target position of the current state
-        new_state[base_y, base_x] = self.state[target_y, target_x]
         # Set state in target position as base position of the current state
+        new_state[base_y, base_x] = self.state[target_y, target_x]
         new_state[target_y, target_x] = self.state[base_y, base_x]
 
-        new_child = AStarNode(new_state, self.h, self.g + self.depth_weight)
+        new_child = AStarNode(new_state, 0, self.g + self.depth_weight)
 
         return new_child
    
