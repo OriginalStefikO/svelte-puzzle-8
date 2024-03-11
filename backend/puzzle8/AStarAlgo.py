@@ -1,6 +1,4 @@
 import heapq
-import math
-import queue
 import numpy as np
 from backend.logger.custom_logger import logger
 from backend.puzzle8.AStarNode import AStarNode
@@ -17,7 +15,7 @@ class AStarAlgo:
 
     def solve(self, depth: int = 15):
         logger.info("Solving...")
-        final_node: AStarNode = AStarNode(self.start_state.state, -1, -1, None)
+        final_node: AStarNode = self.start_state
 
         # Push the start node into the open list
         heapq.heappush(self.open_list, (self.start_state.f, self.start_state))
@@ -46,6 +44,7 @@ class AStarAlgo:
                 heapq.heappush(self.open_list, (child.f, child))
                 self.closed_list.add(child_state_tuple)
 
+        logger.debug("Total nodes expanded: " + str(len(self.closed_list)))
         final_states = final_node.get_all_parents(self.start_state)
         final_states.insert(0, final_node)
         logger.info("Solved!")
@@ -53,12 +52,14 @@ class AStarAlgo:
     
 if __name__ == "__main__":
     # start = [[1, 2, 3], [4, 6, 0], [7, 5, 8]]
-    start = [[2, 8, 0], [5, 1, 4], [7, 6, 3]]
+    # start = [[2, 8, 0], [5, 1, 4], [7, 6, 3]]
     # start = [[0, 4, 3], [2, 1, 6], [7, 5, 8]]
     # start = [[1, 2, 0], [6, 8, 7], [5, 3, 4]]
     start = [[7, 3, 1], [4, 2, 6], [5, 0, 8]]
+    # start = [[0, 1, 2], [3, 4, 5], [6, 7, 8]]
     
     goal = [[1, 2, 3], [4, 5, 6], [7, 8, 0]]
+    # goal = [[0, 1, 2], [3, 4, 5], [6, 7, 8]]
 
     start_node = AStarNode(start, 0, 0)
     start_node.h = start_node.heuristic(np.array(goal))
