@@ -1,3 +1,4 @@
+from typing import Union
 import numpy as np
 from copy import deepcopy
 import logging
@@ -22,7 +23,7 @@ class aStarNode:
 
     def __eq__(self, other: np.ndarray):
         return np.array_equal(self.state, other)
-
+    
     def __hash__(self):
         return hash(self.state.tobytes())
 
@@ -99,16 +100,7 @@ class aStarNode:
         new_child = aStarNode(new_state, self.h, self.g + 1)
 
         return new_child
-
-    # def heuristic(self, goal:np.ndarray) -> int:
-    #   distance = 0
-    #   for i in range(3):
-    #     for j in range(3):
-    #       if self.state[i][j] != goal[i][j]:
-    #         distance += 1
-
-    #   return distance
-
+   
     def heuristic(self, goal: np.ndarray):
         """Manhattan distance
 
@@ -142,90 +134,61 @@ class aStarNode:
             parents += self.parent.get_all_parents(start_node)
 
         return parents
-    
-    def deepcopy(self):
-        copy = aStarNode(self.state, -1, -1, None)
-        copy.f = -1
-        return copy
-
 
 class aStar:
     def __init__(self, start: aStarNode, goal: list[list[int]]) -> None:
         self.start_state = start
         self.goal_state = np.array(goal)
-        self.open_states = [self.start_state]
-        self.closed_states = set()
+        self.open_list = [self.start_state]
+        self.closed_list = []
 
-    def solve(self, max_iterations: int = 1000):
-        open_state = self.open_states[0]
-        iteration = 0
-        while open_state != self.goal_state and iteration < max_iterations:
-            iteration += 1
-
-            self.open_states.remove(open_state)
-            self.closed_states.add(open_state.deepcopy())
-
-            children = open_state.get_children_nodes(self.goal_state)
-            for child in children:
-                child_copy = child.deepcopy()
-
-                if child_copy in self.closed_states:
-                    continue
-                if child in self.open_states:
+    def solve(self, depth: int = 15):
+        final_node:aStarNode = aStarNode(self.start_state.state, -1, -1, None)
+        while self.open_list and final_node != self.goal_state:            
+            self.open_list = sorted(self.open_list, key=lambda x: x.f)
+            q = self.open_list.pop(0)
+            
+            for child in q.get_children_nodes(self.goal_state):
+                if child == self.goal_state:
+                    final_node = child
+                    break
+                
+                if child.g >= depth:
                     continue
                 
-                if (child_copy not in self.closed_states and child.g < 25):
-                    self.open_states.append(child)
-                self.closed_states.add(child_copy)
+                is_in_open_list = False
+                for node in self.open_list:
+                    if child == node.state and child.f >= node.f:
+                        is_in_open_list = True
+                        break
+                
+                if is_in_open_list:
+                    continue
+                
+                is_in_closed_list = False
+                for node in self.closed_list:
+                    if child == node.state and child.f >= node.f:
+                        is_in_closed_list = True
+                        break
+                
+                if is_in_closed_list:
+                    continue
+                
+                self.open_list.append(child)
+                self.closed_list.append(q)
+                    
 
-            # self.get_best_nodes()
-            
-            self.open_states = sorted(self.open_states, key=lambda x: x.f)
-            # print(len(self.open_states))
-            open_state = self.open_states[0]
-
-        print(len(self.open_states))
-        self.open_states = sorted(self.open_states, key=lambda x: x.f)
-        final_states = open_state.get_all_parents(self.start_state)
-        final_states.insert(0, open_state)
+        print(len(self.open_list))
+        self.open_list = sorted(self.open_list, key=lambda x: x.f)
+        
+        final_states = final_node.get_all_parents(self.start_state)
+        final_states.insert(0, final_node)
         return final_states
-
-    def test(self):
-        print(self.open_states[0])
-        print(self.open_states[0].get_children_nodes(self.goal_state))
-        
-        self.open_states.extend(self.open_states[0].get_children_nodes(self.goal_state))
-        self.open_states.sort()
-        
-        for child in self.open_states:
-            print(child)
-            print("----")
-            
-        self.open_states = sorted(self.open_states, key=lambda x: x.f)
-        
-        print("----------------")
-        
-        for child in self.open_states:
-            print(child)
-            print("----")
-
-    def get_best_nodes(self):
-        highest_value = min(self.open_states)
-        best_nodes = [item for item in self.open_states if item.f == highest_value.f]
-
-        for item in self.open_states:
-            if item.f != highest_value.f:
-                self.closed_states.add(item.deepcopy().__hash__)
-            
-        self.open_states = best_nodes
-
 
 if __name__ == "__main__":
     # start = [[1, 2, 3], [4, 6, 0], [7, 5, 8]]
-    start = [[3, 7, 8], [1, 0, 4], [6, 5, 2]]
-    # start = [[1, 2, 3], [4, 8, 5], [7, 6, 0]]
-    # start = [[2, 8, 3], [1, 6, 4], [7, 0, 5]]
-
+    start = [[2, 8, 0], [5, 1, 4], [7, 6, 3]]
+    
     goal = [[1, 2, 3], [4, 5, 6], [7, 8, 0]]
 
     start_node = aStarNode(start, 0, 0)
@@ -235,7 +198,7 @@ if __name__ == "__main__":
     goal_node = goal
     a_star = aStar(start_node, goal_node)
     # final_states = a_star.test()
-    final_states = a_star.solve(1200)
+    final_states = a_star.solve(18)
     final_states.reverse()
 
     for state in final_states:
