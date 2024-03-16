@@ -53,7 +53,6 @@
 
 	<div class="w-0.5 bg-gray-400"></div>
 
-  <!-- Right output pane -->
 	<section>
 		<PuzzleMatrix />
 	</section>

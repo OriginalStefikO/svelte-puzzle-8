@@ -27,7 +27,7 @@
 			window.location.href = '/solve';
 		}
 		else if (checkInputString(inputString)) {
-			window.location.href = `/solve/${inputString}`;
+			window.location.href = `/solve/?inputString=${inputString}`;
 		} else {
 			alert('Invalid input string!');
 			inputField.classList.add('border-b-2', 'border-b-red-500');

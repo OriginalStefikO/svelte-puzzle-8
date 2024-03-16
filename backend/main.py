@@ -7,7 +7,7 @@ from fastapi.responses import FileResponse, JSONResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.middleware.cors import CORSMiddleware
 
-from backend.routers import dummy_api_router
+from backend.routers import api_router, dummy_api_router
 from backend.utils.settings import DEVELOPMENT
 
 
@@ -23,6 +23,7 @@ if DEVELOPMENT == "true":
     )
 
 app.include_router(dummy_api_router.dummy_router)
+app.include_router(api_router.api_router)
 
 @app.exception_handler(404)
 async def not_found_exception_handler(request: Request, exc: HTTPException):
