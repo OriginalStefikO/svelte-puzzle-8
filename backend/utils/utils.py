@@ -21,7 +21,7 @@ def convert_astar_nodes(nodes: list[AStarNode]) -> list[dict[str, str | float]]:
     for node in nodes:
         state_str = matrix_to_string(node.state.tolist())
         puzzle_object = {
-            "state": state_str,
+            "state": node.state.tolist(),
             "f": int(round(node.f, 1)),
             "g": int(round(node.g, 1)),
             "h": int(round(node.h, 1)),

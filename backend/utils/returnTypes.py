@@ -7,5 +7,6 @@ class ISolverPostResponse(TypedDict):
     time_taken: float
     requested_puzzle: str
     desired_output: str
-    solution: list[dict[str, str | float]]
+    total_nodes_expanded: int
     time_taken: float
+    solution: list[dict[str, str | float]]

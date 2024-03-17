@@ -31,6 +31,7 @@ async def solver(start_state: str, goal_state: str) -> ISolverPostResponse:
         "requested_puzzle": start_state,
         "desired_output": goal_state,
         "time_taken": solution["time_taken"],
+        "total_nodes_expanded": solution["total_nodes_expanded"],
         "solution": solution["final_states"]
     }
 

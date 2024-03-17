@@ -4,23 +4,67 @@
 </svelte:head>
 
 <script lang="ts">
-	import Puzzle8Solver from "$lib/components/Puzzle8Solver.svelte";
+	import ButtonPrimary from "$lib/components/ButtonPrimary.svelte";
+import Puzzle8Solver from "$lib/components/Puzzle8Solver.svelte";
+	import SolutionCarousel from "$lib/components/SolutionCarousel.svelte";
 	import { onMount } from "svelte";
-	
-  $: data = {
-		inputString: "123456780"
-	};
+	import axios from "axios";
+	import { puzzleGoalMatrix, puzzleStartMatrix, solverResponse } from "$lib/stores";
+	import PuzzleMatrix from "$lib/components/PuzzleMatrix.svelte";
+	// import { dev } from '$app/environment';
+
+	// const route_base = 'http://localhost:8200/v1/dummy';
+	// const route_dummy = 'http://localhost:8080/v1/dummy';
+
+	const axios_instance = axios.create({
+		baseURL: "http://localhost:8080/v1/",
+	});
 
 	onMount(() => {
 		const searchParams = new URLSearchParams(window.location.search);
 		const inputString = searchParams.get("inputString");
 
-		data = {
-			inputString: inputString || "123456780",
-		};
+		puzzleStartMatrix.set(inputString || "123456780");
 	});
+
+	function solve() {
+		console.log("Solving...");
+		
+		console.log($puzzleStartMatrix);
+		console.log($puzzleGoalMatrix);
+
+		axios_instance.post("/solver", null, { params:{
+			start_state: $puzzleStartMatrix,
+			goal_state: $puzzleGoalMatrix
+		}}).then((response) => {
+			console.log(response.data);
+			solverResponse.set(response.data)
+		}).catch((error) => {
+			console.error(error);
+		});
+	}
 </script>
 
-<div>
-  <Puzzle8Solver inputString={data.inputString} />
+<div class="flex flex-col items-center gap-4">
+  <Puzzle8Solver inputString={$puzzleStartMatrix} />
+
+	<ButtonPrimary onClick={solve}>
+		Solve!
+	</ButtonPrimary>
+
+	<SolutionCarousel>
+		{#if $solverResponse != undefined}
+			{#each $solverResponse.solution.reverse() as matrix, index}
+				<div class="relative bg-secondary items-center gap-2 flex flex-col p-2 rounded-xl w-fit h-fit">
+					<PuzzleMatrix puzzleMatrix={matrix.state} />
+						
+					<div class="flex gap-2">
+						<p class="whitespace-nowrap">G: {matrix.g}</p>
+						<p class="whitespace-nowrap">H: {matrix.h}</p>
+						<p class="whitespace-nowrap">F: {matrix.f}</p>
+					</div>
+				</div>
+			{/each}
+		{/if}
+	</SolutionCarousel>
 </div>
