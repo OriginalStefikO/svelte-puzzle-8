@@ -6,13 +6,10 @@
     "setup-project": "cd ./frontend && npm install && cd ../ && python -m venv venv && venv\\Scripts\\activate && pip install -r requirements.txt",
     "frontend-build": "cd ./frontend && npm run build",
     "frontend-dev": "cd ./frontend && npm run dev",
-    "backend-dev": "venv\\Scripts\\activate && python main.py --dev",
-    "backend-run": "venv\\Scripts\\activate && python main.py",
+    "backend-dev": "venv\\Scripts\\activate && python -m backend.main --dev",
+    "backend-run": "venv\\Scripts\\activate && python -m backend.main",
     "build-and-run": "npm run frontend-build && npm run backend-run"
   },
   "author": "Stefik_O",
-  "license": "MIT",
-  "dependencies": {
-    "lucide-svelte": "^0.358.0"
-  }
+  "license": "MIT"
 }

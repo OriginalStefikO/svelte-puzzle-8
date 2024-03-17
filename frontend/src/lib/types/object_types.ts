@@ -11,5 +11,6 @@ export type PuzzleResponse = {
   requested_puzzle: string;
   desired_output: string;
   time_taken: number;
+  total_nodes_expanded: number;
   solution: PuzzleSolution[];
 };

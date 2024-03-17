@@ -3,9 +3,7 @@
   import type { EmblaOptionsType, EmblaPluginType, EmblaCarouselType } from 'embla-carousel';
   import { WheelGesturesPlugin } from 'embla-carousel-wheel-gestures'
 	import ChevronLeft from 'lucide-svelte/icons/chevron-left';
-  import ChevronRight from 'lucide-svelte/icons/chevron-right';
-	import PuzzleMatrix from './PuzzleMatrix.svelte';
-  
+  import ChevronRight from 'lucide-svelte/icons/chevron-right'; 
 
   let options: EmblaOptionsType = { loop: false }
   let plugins: EmblaPluginType[] = [WheelGesturesPlugin()]
@@ -19,34 +17,36 @@
     emblaApi = event.detail
     scrollProgress = emblaApi.selectedScrollSnap() + 1
     childrenCount = emblaApi.slideNodes().length
-
+    
+    emblaApi.slideNodes()[scrollProgress - 1].classList.remove('opacity-25')
+    
     emblaApi.on('select', () => {
       scrollProgress = emblaApi.selectedScrollSnap() + 1
-      childrenCount = emblaApi.slideNodes().length
+
+      emblaApi.slideNodes().forEach((node) => {
+        node.classList.add('opacity-25')
+      })
 
       emblaApi.slideNodes()[scrollProgress - 1].classList.remove('opacity-25')
-      emblaApi.slideNodes()[scrollProgress - 1].classList.add('opacity-100')
+    })
 
-      emblaApi.slideNodes()[scrollProgress].classList.add('opacity-25')
+    emblaApi.on('slidesChanged', () => {
+      scrollProgress = 1
+      emblaApi.scrollTo(scrollProgress - 1)
 
-      if (scrollProgress - 2 >= 0) {
-        emblaApi.slideNodes()[scrollProgress - 2].classList.add('opacity-25')
-      }
+      emblaApi.slideNodes().forEach((node) => {
+        node.classList.add('opacity-25')
+      })
+      emblaApi.slideNodes()[scrollProgress - 1].classList.remove('opacity-25')
 
-      if (scrollProgress < childrenCount) {
-        emblaApi.slideNodes()[scrollProgress].classList.add('opacity-25')
-      }
+      childrenCount = emblaApi.slideNodes().length
 
-      if (scrollProgress - 1 >= 0) {
-        emblaApi.slideNodes()[scrollProgress - 1].classList.remove('opacity-25')
-        emblaApi.slideNodes()[scrollProgress - 1].classList.add('opacity-100')
-      }
     })
   }
 </script>
 
-<div class="w-full max-w-96 bg-embla-carousel p-4 rounded-[.25rem] overflow-hidden">
-  <div class="overflow-hidden" use:emblaCarouselSvelte={{ options, plugins }} on:emblaInit={onInit}>
+<div class="w-full max-w-96 bg-embla-carousel p-4">
+  <div class="overflow-hidden rounded-md" use:emblaCarouselSvelte={{ options, plugins }} on:emblaInit={onInit}>
     <div class="flex gap-2">
       <slot />
 		</div>

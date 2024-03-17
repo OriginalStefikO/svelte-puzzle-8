@@ -36,6 +36,7 @@
 	"dependencies": {
 		"axios": "^1.6.8",
 		"embla-carousel-svelte": "^8.0.0",
-		"embla-carousel-wheel-gestures": "^8.0.0-rc05"
+		"embla-carousel-wheel-gestures": "^8.0.0-rc05",
+		"lucide-svelte": "^0.358.0"
 	}
 }
