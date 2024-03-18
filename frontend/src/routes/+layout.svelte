@@ -1,9 +1,10 @@
 <script>
+  import Github from 'lucide-svelte/icons/github';
+	
 	import Navbar from '$lib/components/Navbar.svelte';
 	import './styles.css';
 
 	import linkedin_logo from '$lib/images/logo_linkedin.png';
-  import github_logo from '$lib/images/github.svg';
 	import instagram_logo from '$lib/images/logo_instagram.png';
 </script>
 
@@ -23,10 +24,10 @@
 		</main>
 	</div>
 
-	<footer class="p-3 flex gap-2 items-center">
+	<footer class="p-3 flex gap-2 items-center text-text">
 		<p>Created by <a href="https://www.linkedin.com/in/steffan-ondrej/">Ondřej Šteffan</a></p>
 		<a href="https://github.com/OriginalStefikO" target="_blank" class="flex items-center justify-center">
-			<img class="size-7 mb-0.5 object-contain " src={github_logo} alt="Github logo" />
+			<Github class="stroke-accent" />
 		</a>
 		<a href="https://www.linkedin.com/in/steffan-ondrej/" target="_blank" class="flex items-center justify-center">
 			<img class="size-6 object-contain " src={linkedin_logo} alt="Linkedin logo" />

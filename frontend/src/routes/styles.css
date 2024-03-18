@@ -6,6 +6,10 @@ a {
   @apply text-blue-500;
 }
 
+h1, h2, h3, h4, h5, p {
+  @apply text-text;
+}
+
 h1 {
   @apply text-2xl;
 }

@@ -4,7 +4,8 @@
 </svelte:head>
 
 <script lang="ts">
-	import { checkInputString } from "$lib/scripts/regex";
+	import ButtonPrimary from "$lib/components/ButtonPrimary.svelte";
+import { checkInputString } from "$lib/scripts/regex";
 
 	let inputString:string = '';
 	let inputField: HTMLInputElement;
@@ -27,7 +28,7 @@
 			window.location.href = '/solve';
 		}
 		else if (checkInputString(inputString)) {
-			window.location.href = `/solve/${inputString}`;
+			window.location.href = `/solve/?inputString=${inputString}`;
 		} else {
 			alert('Invalid input string!');
 			inputField.classList.add('border-b-2', 'border-b-red-500');
@@ -45,7 +46,7 @@
 		bind:this={inputField}
 	/>
 
-	<button class="w-fit h-fit bg-blue-500 py-3 px-5 rounded-xl text-white font-bold" on:click={startSolving}>
-		Start solving!
-	</button>
+	<ButtonPrimary onClick={startSolving}>
+		Solve!
+	</ButtonPrimary>
 </div>

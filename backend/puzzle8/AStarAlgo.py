@@ -1,4 +1,5 @@
 import heapq
+import time
 import numpy as np
 from backend.logger.custom_logger import logger
 from backend.puzzle8.AStarNode import AStarNode
@@ -6,15 +7,20 @@ from backend.puzzle8.AStarNode import AStarNode
 logger = logger.getChild("newaStar")
 
 class AStarAlgo:
-    def __init__(self, start: AStarNode, goal: list[list[int]]) -> None:
-        self.start_state = start
+    def __init__(self, start: list[list[int]], goal: list[list[int]]) -> None:
+        self.start_state = AStarNode(start, 0, 0)
         self.goal_state = np.array(goal)
         
         self.open_list = []
         self.closed_list = set()
+        
+        self.start_state.h = self.start_state.heuristic(self.goal_state)
+        self.start_state.update_f()
 
-    def solve(self, depth: int = 15):
+    def solve(self, depth: int = 30):
         logger.info("Solving...")
+        
+        start_time = time.time()
         final_node: AStarNode = self.start_state
 
         # Push the start node into the open list
@@ -44,11 +50,21 @@ class AStarAlgo:
                 heapq.heappush(self.open_list, (child.f, child))
                 self.closed_list.add(child_state_tuple)
 
-        logger.debug("Total nodes expanded: " + str(len(self.closed_list)))
+        time_taken = time.time() - start_time
+        total_nodes_expanded = len(self.closed_list) + 1
+        
+        logger.debug("Time taken: " + str(time_taken))
+        logger.debug("Total nodes expanded: " + str(total_nodes_expanded))
+        
         final_states = final_node.get_all_parents(self.start_state)
         final_states.insert(0, final_node)
         logger.info("Solved!")
-        return final_states
+        
+        return {
+            "time_taken": time_taken,
+            "total_nodes_expanded": total_nodes_expanded,
+            "final_states": final_states,
+        }
     
 if __name__ == "__main__":
     # start = [[1, 2, 3], [4, 6, 0], [7, 5, 8]]
@@ -61,16 +77,11 @@ if __name__ == "__main__":
     goal = [[1, 2, 3], [4, 5, 6], [7, 8, 0]]
     # goal = [[0, 1, 2], [3, 4, 5], [6, 7, 8]]
 
-    start_node = AStarNode(start, 0, 0)
-    start_node.h = start_node.heuristic(np.array(goal))
-    start_node.update_f()
-
-    goal_node = goal
-    a_star = AStarAlgo(start_node, goal_node)
+    a_star = AStarAlgo(start, goal)
     
     final_states = a_star.solve(30)
-    final_states.reverse()
+    final_states["final_states"].reverse()
 
-    for state in final_states:
+    for state in final_states["final_states"]:
         print(state)
         print("----")
