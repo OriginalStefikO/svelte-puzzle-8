@@ -1,6 +1,7 @@
-# Svelte Puzzle 8 (Made in January 2024)
- 
-Last year school project
+# Svelte Puzzle 8 (1Q2024)
+
+> [!NOTE]  
+> School project made in the last year of High School
 
 - Requirements: 
     - [Python 3.10+](https://www.python.org/downloads/)
@@ -46,9 +47,13 @@ npm run build-and-run
 # This will build frontend, backend and run it
 ```
 
-## If you like it you can give me a star ⭐ or check out my profile and other projects
+## If you like it you can give me a star ⭐, check out my profile and other projects
 - [My GitHub profile](https://github.com/OriginalStefikO) - All my projects and more about me
 - [FastAPI + Svelte starter](https://github.com/OriginalStefikO/fastapi-svelte-starter) - beginner friendly template and tutorial
+
+> Or you can buy me a coffee, a lot of it was sacrificed for this project :D
+
+<a href="https://www.buymeacoffee.com/stefiko" target="_blank"><img src="https://cdn.buymeacoffee.com/buttons/default-yellow.png" alt="Buy Me A Coffee" height="41" width="174"></a>
 
 ### License
 
