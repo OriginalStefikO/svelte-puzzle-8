@@ -19,7 +19,13 @@
       target.value = target.value.slice(0, 9);
     }
 
-    if (!checkInputString(inputString)) { return; }
+    let currentString = inputString;
+
+    if (target.id !== 'inputString') {
+      currentString = outputString;
+    }
+    
+    if (!checkInputString(currentString)) { return; }
     
     target.classList.remove('border-b-2', 'border-b-red-500');
     const resultMatrix = target.value;
@@ -55,6 +61,7 @@
         class="h-8 rounded-lg border border-gray-400 p-2 text-background"
         placeholder="123456780"
         bind:value={outputString}
+        on:input={(e) => inputFieldChange(e)}
       />
     </div>
 	</section>

@@ -3,6 +3,8 @@ import time
 import numpy as np
 from backend.logger.custom_logger import logger
 from backend.puzzle8.AStarNode import AStarNode
+from backend.utils.returnTypes import IAStarAlgoSolve
+from backend.utils.utils import isSolvable
 
 logger = logger.getChild("newaStar")
 
@@ -17,11 +19,22 @@ class AStarAlgo:
         self.start_state.h = self.start_state.heuristic(self.goal_state)
         self.start_state.update_f()
 
-    def solve(self, depth: int = 30):
+    def solve(self, depth: int = 30, max_open_nodes: int = 5000) -> IAStarAlgoSolve:
         logger.info("Solving...")
         
         start_time = time.time()
         final_node: AStarNode = self.start_state
+        
+        if isSolvable(self.start_state.state) != True:
+            logger.error("Puzzle is not solvable")
+            
+            return {
+                "time_taken": time.time() - start_time,
+                "total_nodes_expanded": len(self.closed_list) + 1,
+                "final_states": [],
+                "status_code": 400,
+                "message": "Puzzle is not solvable"
+            }
 
         # Push the start node into the open list
         heapq.heappush(self.open_list, (self.start_state.f, self.start_state))
@@ -49,6 +62,17 @@ class AStarAlgo:
 
                 heapq.heappush(self.open_list, (child.f, child))
                 self.closed_list.add(child_state_tuple)
+                
+            if len(self.closed_list) > max_open_nodes:
+                logger.error("Open list is too large")
+                
+                return {
+                    "time_taken": time.time() - start_time,
+                    "total_nodes_expanded": len(self.closed_list) + 1,
+                    "final_states": [],
+                    "status_code": 500,
+                    "message": f"Cannot find solution even after {max_open_nodes} nodes expanded"
+                }
 
         time_taken = time.time() - start_time
         total_nodes_expanded = len(self.closed_list) + 1
@@ -64,6 +88,8 @@ class AStarAlgo:
             "time_taken": time_taken,
             "total_nodes_expanded": total_nodes_expanded,
             "final_states": final_states,
+            "status_code": 200,
+            "message": "Success"
         }
     
 if __name__ == "__main__":

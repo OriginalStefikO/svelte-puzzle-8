@@ -28,3 +28,24 @@ def convert_astar_nodes(nodes: list[AStarNode]) -> list[dict[str, str | float]]:
         }
         puzzle_objects.append(puzzle_object)
     return puzzle_objects
+
+def getInvCount(arr):
+    inv_count = 0
+    arr = arr.flatten()
+    empty_value = 0
+    for i in range(len(arr)):
+        for j in range(i + 1, len(arr)):
+            if arr[j] != empty_value and arr[i] != empty_value and arr[i] > arr[j]:
+                inv_count += 1
+    return inv_count
+
+def isSolvable(puzzle):
+    inv_count = getInvCount(np.array(puzzle))
+    return (inv_count % 2 == 0)
+
+if __name__ == "__main__":    
+    from backend.logger.custom_logger import logger
+    
+    logger.debug(isSolvable([[7, 3, 1], [4, 2, 6], [5, 0, 8]]))
+    logger.debug(isSolvable([[7, 3, 1], [2, 4, 6], [5, 0, 8]]))
+    logger.debug(isSolvable([[7, 3, 6], [4, 2, 1], [5, 0, 8]]))
